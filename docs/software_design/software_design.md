@@ -6,8 +6,9 @@
    3.3 Interfaces
    3.4 Data Structures
 
-**1. System Architecture**
+## 1. System Architecture
 
+```text
 risk_system/
 │
 ├── data/
@@ -60,6 +61,7 @@ risk_system/
 │
 ├── requirements.txt
 └── README.md
+```
 
 **2. Data Flow**
 
