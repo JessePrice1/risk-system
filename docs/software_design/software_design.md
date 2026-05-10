@@ -65,14 +65,15 @@ risk_system/
 
 **2. Data Flow**
 
--> Raw Data 
--> loader.py
--> processed data
--> volatility estimation
--> pricing models
--> risk models (VaR / ES)
--> backtesting
--> reports
+
+* Raw Data -> 
+* loader.py -> 
+* processed data -> 
+* volatility estimation -> 
+* pricing models -> 
+* risk models (VaR / ES) -> 
+* backtesting -> 
+* reports
 
 **3. System Design Details**
 
@@ -96,7 +97,11 @@ risk_system/
 
 *Utils Module*
 
+`covariance.py`
+- Covariance captures portfolio risk from joint movements. It is important for calculating Parametric VaR.
+
 *Tests Module*
+- The test module validates the mathematical correctness, numerical stability, and robustness of all implemented pricing, volatility, and risk models.
 
 *Reports Module*
 
@@ -124,7 +129,10 @@ risk_system/
 
 *Utils Module*
 
+   `covariance.py` assumes linear dependence between asset returns
+
 *Tests Module*
+- Test datasets are assumed to be representative of realistic market conditions and sufficiently large to evaluate model behavior reliably.
 
 *Reports Module*
 
@@ -148,4 +156,12 @@ risk_system/
 
 *Utils Module*
 
+`covariance.py`
+- Input: `returns_matrix` (T × N)
+   - rows = time
+   - columns = assets
+- Output: `cov_matrix` (N × N)
+   - How each asset pairs with every other asset
+
 *Test Module*
+- The test module takes model outputs and benchmark datasets as input and returns validation metrics, error statistics, and pass/fail test outcomes.
