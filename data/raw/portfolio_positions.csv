@@ -1,0 +1,4 @@
+ticker,quantity,asset_type
+AAPL,100,stock
+MSFT,50,stock
+TSLA,25,stock

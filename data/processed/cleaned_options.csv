@@ -1,0 +1,3 @@
+ticker,type,strike,maturity,market_price
+AAPL,call,200,0.5,12.5
+MSFT,put,350,1.0,18.0
