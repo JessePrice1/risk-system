@@ -301,25 +301,6 @@ The test module checks if the implementations are correct and robust for all pri
 - Tests validate implementation correctness, not financial truth
 - Cannot guarantee predictive performance in real markets
 
----
-
-## **Reports Module**
-
-### Purpose
-Stores generated outputs, graphs, and final risk analysis results for reporting and submission.
-
-### Assumptions
-- All upstream computations are completed successfully
-
-### Interface
-- Input: model outputs (VaR, ES, volatility, pricing results)
-- Output: saved reports and visualizations
-
-### Limitations
-- Does not perform computation itself
-
----
-
 ## **Requirements Module**
 
 ### Purpose
