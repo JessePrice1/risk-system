@@ -334,20 +334,3 @@ Defines Python dependencies required to run the project.
 
 ### Limitations
 - Version conflicts may occur if environment changes
-
----
-
-## **README.md**
-
-### Purpose
-Provides instructions on how to run and understand the project.
-
-### Assumptions
-- User has basic Python and financial modeling knowledge
-
-### Interface
-- Input: none
-- Output: project documentation
-
-### Limitations
-- Does not execute or validate system functionality
