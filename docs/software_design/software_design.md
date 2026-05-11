@@ -5,7 +5,6 @@
 * 3.2 Assumptions
 * 3.3 Interfaces
 * 3.4 Limitations
-* 3.5 Data Structures
 
 ## 1. System Architecture
 
