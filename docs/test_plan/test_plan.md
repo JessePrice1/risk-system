@@ -236,6 +236,7 @@ This test plan validates the correctness and robustness of the following risk mo
 - monte_carlo_option_var
 - monte_carlo_portfolio_var
 - cvar_from_pnl / portfolio_cvar
+- backtesting (kupiec_pof_test / christoffersen_test)
 
 ---
 
@@ -252,7 +253,7 @@ The objective is to ensure that the Group D risk models:
 
 # 2. Test Design Overview
 
-We implement **three core test cases**:
+We implement **four core test cases**:
 
 ### Test 1 — Historical VaR Consistency
 Checks:
@@ -275,6 +276,15 @@ Checks:
 - Portfolio VaR ≥ individual VaR (diversification effect is bounded)
 - P&L arrays are correctly generated
 - VaR is finite and stable under simulation
+
+---
+
+### Test 4 — Backtesting (Kupiec POF + Christoffersen Independence)
+Checks:
+- Kupiec p-value is valid (between 0 and 1) and LR statistic is finite
+- Christoffersen p-value is valid and LR statistic is finite
+- backtest_var wrapper correctly counts violations and computes violation rate
+- Conclusion is either PASS or FAIL
 
 ---
 

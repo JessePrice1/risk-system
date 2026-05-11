@@ -6,6 +6,9 @@ from src.risk.expected_shortfall import cvar_from_pnl
 from src.risk.monte_carlo_var import monte_carlo_stock_var, monte_carlo_portfolio_var
 
 
+from src.risk.backtesting import kupiec_pof_test, christoffersen_test, backtest_var
+
+
 # =========================================================
 # TEST 1 — Historical VaR Consistency
 # =========================================================
@@ -81,11 +84,45 @@ def test_monte_carlo_portfolio():
 
 
 # =========================================================
+# TEST 4 — Backtesting (Kupiec POF + Christoffersen)
+# =========================================================
+def test_backtesting():
+    np.random.seed(42)
+    n = 1000
+    returns = np.random.normal(0.001, 0.02, n)
+    # Simulate a VaR series that should have ~1% violation rate at 99%
+    var_series = np.full(n, np.percentile(-returns, 99))
+
+    # Kupiec test
+    violations = int(np.sum(-returns > var_series))
+    kupiec = kupiec_pof_test(violations, n, confidence=0.99)
+    assert kupiec["p_value"] >= 0, "p-value must be non-negative"
+    assert kupiec["p_value"] <= 1, "p-value must be at most 1"
+    assert np.isfinite(kupiec["LR_statistic"]), "LR statistic must be finite"
+    assert kupiec["conclusion"] in ["PASS", "FAIL"], "Must have valid conclusion"
+
+    # Christoffersen test
+    violation_seq = (-returns > var_series).astype(int).tolist()
+    christ = christoffersen_test(violation_seq, confidence=0.99)
+    assert christ["p_value"] >= 0, "p-value must be non-negative"
+    assert np.isfinite(christ["LR_statistic"]), "LR statistic must be finite"
+
+    # backtest_var wrapper
+    bt = backtest_var(returns, var_series, confidence=0.99)
+    assert bt["violation_rate"] >= 0, "Violation rate must be non-negative"
+    assert bt["violation_rate"] <= 1, "Violation rate must be at most 1"
+    assert bt["n_obs"] == n, "Observation count must match"
+
+    print("✔ Test 4 Passed — Backtesting (Kupiec + Christoffersen)")
+
+
+# =========================================================
 # RUN ALL TESTS
 # =========================================================
 if __name__ == "__main__":
     test_historical_var()
     test_parametric_var_sensitivity()
     test_monte_carlo_portfolio()
+    test_backtesting()
 
     print("\n✔ All Group D Risk Model tests passed.")

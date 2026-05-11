@@ -1,13 +1,13 @@
 ```tests/
 │
-├── test_core_system.py — Data Layer
+├── test_core_system.py — Core System
+│ ├── main
+│ └── config
+│
+├── test_data_layer.py — Data Layer
 │ ├── data_loader
 │ ├── download_data
 │ └── process_data
-│
-├── test_data_layer.py — Core System
-│ ├── main
-│ └── config
 │
 ├── test_pricing.py — Pricing Models
 │ ├── stock_pricer
@@ -17,9 +17,8 @@
 │ ├── historical_var
 │ ├── parametric_var
 │ ├── monte_carlo_var
-│ ├── historical_es
-│ ├── parametric_es
-│ └── monte_carlo_es
+│ ├── expected_shortfall
+│ └── backtesting
 │
 └── test_vol_stats.py — Volatility / Statistics
 ├── ewma
@@ -63,10 +62,11 @@ Data layer tests confirm that all required raw and processed datasets are correc
 ✔ Test 1 Passed — Historical VaR consistency
 ✔ Test 2 Passed — Parametric VaR volatility sensitivity
 ✔ Test 3 Passed — Monte Carlo portfolio coherence
+✔ Test 4 Passed — Backtesting (Kupiec + Christoffersen)
 
 ✔ All Group D Risk Model tests passed.
 
-Risk system tests confirm that historical, parametric, and Monte Carlo VaR/ES implementations are mathematically consistent, correctly respond to volatility changes, and produce coherent and well-behaved portfolio-level risk estimates.
+Risk system tests confirm that historical, parametric, and Monte Carlo VaR/ES implementations are mathematically consistent, correctly respond to volatility changes, and produce coherent and well-behaved portfolio-level risk estimates. Backtesting validates that Kupiec POF and Christoffersen independence tests produce valid statistics and correctly assess model calibration.
 
 `test_vol_stats.py`
 
