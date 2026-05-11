@@ -224,3 +224,73 @@ The pricing system is valid if:
 - Constant volatility in Black-Scholes model
 - No jumps or fat tails
 - Calibration depends on quality of historical data
+
+# Group D — Risk Models Test Plan
+
+## Models Covered
+This test plan validates the correctness and robustness of the following risk models:
+
+- historical_var
+- parametric_var
+- monte_carlo_stock_var
+- monte_carlo_option_var
+- monte_carlo_portfolio_var
+- cvar_from_pnl / portfolio_cvar
+
+---
+
+# 1. Test Objective
+
+The objective is to ensure that the Group D risk models:
+
+- Produce mathematically correct risk measures (VaR and CVaR)
+- Behave consistently under controlled inputs
+- Are robust across different market scenarios (low/high volatility, different distributions)
+- Maintain logical relationships between risk measures (e.g., higher volatility → higher VaR)
+
+---
+
+# 2. Test Design Overview
+
+We implement **three core test cases**:
+
+### Test 1 — Historical VaR Consistency
+Checks:
+- VaR is positive
+- CVaR ≥ VaR (loss tail behavior is correct)
+- Increasing losses increase VaR
+
+---
+
+### Test 2 — Parametric VaR Volatility Sensitivity
+Checks:
+- Higher volatility increases VaR
+- VaR is finite and positive
+- Model reacts correctly to risk scaling
+
+---
+
+### Test 3 — Monte Carlo Portfolio Coherence
+Checks:
+- Portfolio VaR ≥ individual VaR (diversification effect is bounded)
+- P&L arrays are correctly generated
+- VaR is finite and stable under simulation
+
+---
+
+# 3. Robustness Coverage
+
+The tests also indirectly validate:
+
+- Extreme loss scenarios (tail risk behavior)
+- Sensitivity to volatility and return distributions
+- Stability under Monte Carlo randomness
+- Consistency between analytical and simulation-based models
+
+---
+
+# 4. Limitations Acknowledged
+
+- Assumes normality in parametric model
+- Monte Carlo results depend on seed and number of simulations
+- Historical VaR depends on sample size and past relevance
