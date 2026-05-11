@@ -294,3 +294,99 @@ The tests also indirectly validate:
 - Assumes normality in parametric model
 - Monte Carlo results depend on seed and number of simulations
 - Historical VaR depends on sample size and past relevance
+
+# Group F — Volatility / Statistics Test Plan
+
+## Overview
+This test plan validates the correctness, stability, and statistical soundness of the Group F volatility and statistical models:
+
+- EWMA volatility (`ewma_volatility`)
+- GARCH(1,1) volatility (`garch_11_volatility`)
+- Implied volatility solver (`implied_vol`)
+- Statistical utilities (`return_statistics`, `jarque_bera_test`)
+- Covariance estimation (`covariance_matrix`)
+
+The goal is to ensure:
+- Mathematical correctness of implementations
+- Stability under realistic and extreme inputs
+- Statistical consistency with expected financial behavior
+
+---
+
+# Test 1 — Volatility Positivity & Stability (EWMA + GARCH)
+
+## Purpose
+Ensure volatility models produce:
+- Positive volatility values
+- Finite outputs
+- Stable behavior under random return inputs
+
+## Design
+We simulate random returns and verify:
+- EWMA volatility is positive and non-NaN
+- GARCH volatility is positive and non-NaN
+
+## Expected Result
+- No negative or NaN volatility values
+- Volatility reacts to randomness but remains stable
+
+---
+
+# Test 2 — Implied Volatility Consistency
+
+## Purpose
+Validate that implied volatility solver:
+- Produces a finite solution
+- Produces a volatility consistent with Black-Scholes pricing
+
+## Design
+- Generate synthetic option price using known volatility
+- Recover implied volatility
+- Compare recovered vs true volatility
+
+## Expected Result
+- |σ_implied − σ_true| is small (within tolerance)
+- No convergence failure (NaN)
+
+---
+
+# Test 3 — Statistical & Covariance Consistency
+
+## Purpose
+Validate statistical correctness of:
+- Return statistics (mean, std, skew, kurtosis)
+- Covariance matrix structure
+
+## Design
+- Generate correlated synthetic returns
+- Compute:
+  - statistics summary
+  - covariance matrix
+- Validate:
+  - covariance matrix is symmetric
+  - diagonal entries are positive
+  - statistics are finite
+
+## Expected Result
+- Covariance matrix is symmetric and positive diagonal
+- All statistics are finite and well-defined
+
+---
+
+# Test Coverage Summary
+
+| Area | Coverage |
+|------|----------|
+| EWMA Volatility | ✔ |
+| GARCH Volatility | ✔ |
+| Implied Volatility | ✔ |
+| Statistical Metrics | ✔ |
+| Covariance Matrix | ✔ |
+
+---
+
+# Limitations
+
+- No real market data stress testing included
+- No regime-switching volatility tested
+- Covariance assumes clean returns (no microstructure noise)
