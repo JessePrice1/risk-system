@@ -143,3 +143,84 @@ The Core System tests demonstrate that:
 - Monte Carlo simulation results are consistent and reproducible
 
 The Core System is therefore considered operationally stable and correctly integrated.
+
+# Group C — Pricing Models Test Plan  
+## Modules: stock_pricer.py + option_pricer.py  
+
+---
+
+# Objective
+
+This test suite validates the correctness, stability, and financial realism of:
+
+- Black-Scholes European option pricing model
+- GBM (Geometric Brownian Motion) calibration model
+
+The goal is to ensure that both models are mathematically correct and behave consistently under realistic market conditions.
+
+---
+
+# Test 1 — Black-Scholes Output Validity (Component Test)
+
+## Purpose
+Ensure the Black-Scholes formula produces valid and non-negative option prices.
+
+## What is tested
+- Call and put prices are positive
+- Call and put differ appropriately
+- No NaN or infinite values
+
+## Expected Result
+- Valid financial prices
+- No numerical instability
+
+---
+
+# Test 2 — GBM Calibration Validity (Robustness Test)
+
+## Purpose
+Check that GBM calibration produces stable and finite estimates of volatility and drift.
+
+## What is tested
+- σ (volatility) > 0
+- μ is finite
+- Model works on simulated market data
+
+## Expected Result
+- Stable parameter estimates
+- No crashes or invalid outputs
+
+---
+
+# Test 3 — Volatility Sensitivity (Model Behavior Test)
+
+## Purpose
+Ensure option prices behave correctly under changes in volatility.
+
+## What is tested
+- Higher volatility leads to higher option price
+- Monotonic relationship preserved
+
+## Expected Result
+- Consistent financial intuition
+- No inverted or unstable pricing behavior
+
+---
+
+# Overall Validation Criteria
+
+The pricing system is valid if:
+
+- ✔ Black-Scholes outputs are finite and positive
+- ✔ GBM calibration produces realistic parameters
+- ✔ Option prices increase with volatility
+- ✔ No numerical instability across tests
+
+---
+
+# Model Limitations
+
+- Assumes log-normal returns (GBM assumption)
+- Constant volatility in Black-Scholes model
+- No jumps or fat tails
+- Calibration depends on quality of historical data
