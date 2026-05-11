@@ -11,6 +11,8 @@
 ```text
 risk_system/
 │
+├── Implemented/
+│
 ├── data/
 │   ├── raw/
 │   ├── processed/
@@ -52,10 +54,8 @@ risk_system/
 │   │   ├── covariance.py
 │   │   └── plots.py
 │
-├── reports/
 │
 ├── requirements.txt
-└── README.md
 ```
 
 **2. Data Flow**
