@@ -371,19 +371,6 @@ Validate statistical correctness of:
 - Covariance matrix is symmetric and positive diagonal
 - All statistics are finite and well-defined
 
----
-
-# Test Coverage Summary
-
-| Area | Coverage |
-|------|----------|
-| EWMA Volatility | ✔ |
-| GARCH Volatility | ✔ |
-| Implied Volatility | ✔ |
-| Statistical Metrics | ✔ |
-| Covariance Matrix | ✔ |
-
----
 
 # Limitations
 
