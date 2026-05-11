@@ -34,19 +34,18 @@ risk_system/
 │   ├── pricing/
 │   │   ├── stock_pricer.py
 │   │   ├── option_pricer.py
+│   │   └── greeks.py
 │   │
 │   ├── risk/
 │   │   ├── historical_var.py
 │   │   ├── parametric_var.py
 │   │   ├── monte_carlo_var.py
-│   │   ├── historical_es.py
-│   │   ├── monte_carlo_es.py
-│   │   ├── parametric_es.py
+│   │   ├── expected_shortfall.py
 │   │   └── backtesting.py
 │   │
 │   ├── volatility/
 │   │   ├── ewma.py
-│   │   ├── rolling_window.py
+│   │   ├── garch.py
 │   │   └── implied_vol.py
 │   │
 │   ├── utils/
@@ -214,37 +213,57 @@ Stores global model parameters such as confidence levels, time horizon, volatili
 ## **Pricing Module**
 
 ### Purpose
-Computes asset, and option pricing, greeks, and GBM calibatation from historical prices using financial models 
+Computes asset and option pricing, Greeks, and GBM calibration from historical prices using financial models.
+
+**Submodules:**
+- `option_pricer.py` — Black-Scholes European option pricing (call/put)
+- `stock_pricer.py` — GBM parameter calibration via MLE (mu, sigma) from historical prices; includes diagnostics (skewness, kurtosis) to assess GBM fit
+- `greeks.py` — Delta, Gamma, Vega, Theta for European options
 
 ### Assumptions
-- Market follows simplified pricing assumptions (e.g., lognormal returns for options)
-- Inputs such as volatility are correctly provided
+- Market follows GBM dynamics (lognormal returns) for stock calibration
+- Options are European-style; no early exercise
+- Volatility input is constant over option lifetime (no smile/skew modeling)
+- Calibration window is user-specified; longer windows smooth noise but lag regime changes
 
 ### Interface
-- Input: asset prices, strikes, maturities, volatility
-- Output: option prices, Greeks, calibration statistics (mu, gamma)
+- Input: asset prices, strikes, maturities, volatility, risk-free rate
+- Output: option prices, Greeks, calibration statistics (mu, sigma, skewness, kurtosis)
 
 ### Limitations
 - Does not model complex market frictions or transaction costs
+- No support for American options or exotic payoffs
+- GBM calibration may produce misleading parameters during regime transitions
 
 ---
 
 ## **Risk Module**
 
 ### Purpose
-Implements risk metrics including VaR and Expected Shortfall and statistical backtesting. The module supports multiple methodologies: historical, parametric, and Monte Carlo methods, along with model validation tests.
+Implements risk metrics including VaR and Expected Shortfall (CVaR), statistical backtesting, and multi-regime stress testing. The module supports multiple methodologies: historical, parametric, and Monte Carlo methods, along with model validation tests.
+
+**Submodules:**
+- `monte_carlo_var.py` — GBM-based MC simulation for stocks, options (BS repricing), and combined portfolios with correlation support
+- `expected_shortfall.py` — CVaR computation from simulated P&L; portfolio-level CVaR with subadditivity verification (proving coherence vs VaR)
+- `backtesting.py` — Kupiec Proportion of Failures test (unconditional coverage) and Christoffersen independence test (violation clustering detection)
+- `historical_var.py` — Non-parametric VaR/CVaR from historical return distributions
+- `parametric_var.py` — Variance-covariance VaR/CVaR assuming normal returns
 
 ### Assumptions
 - Return distributions approximate historical behavior or assumed parametric forms
 - Portfolio composition is static over risk horizon
+- Monte Carlo option VaR uses risk-neutral drift (r) for GBM simulation and Black-Scholes for repricing at horizon
+- Backtesting assumes daily P&L observations with rolling recalibration
 
 ### Interface
-- Input: returns, portfolio weights, confidence levels
-- Output: VaR / ES estimates
+- Input: returns, portfolio weights, confidence levels, option parameters (S0, K, T, sigma), correlation matrices
+- Output: VaR / CVaR estimates, backtesting statistics (LR, p-value, pass/fail), regime comparison tables
 
 ### Limitations
-- Sensitive to distributional assumptions
-- May underestimate extreme tail events
+- Sensitive to distributional assumptions (GBM assumes lognormal; real returns exhibit fat tails and skewness)
+- CVaR estimates depend on tail sample size; may be noisy at extreme confidence levels (99%+)
+- Backtesting power is limited with small sample sizes
+- No stochastic volatility or jump-diffusion models implemented
 
 ---
 
